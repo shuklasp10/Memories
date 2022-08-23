@@ -26,7 +26,7 @@ export const createPost = async (req,res)=>{
 export const likePost = (req,res)=>{
     try{
         const {id} = req.params;
-        if (mongoose.Types.ObjectId.isValid(id)) return res.status(400).send({error:'Id is not valid'});
+        if (!mongoose.Types.ObjectId.isValid(id)) return res.status(400).send({error:'Id is not valid'});
         PostMessage.findByIdAndUpdate(id,{$inc:{likeCount:1}},{new:true},(err,doc)=>{
             if(!err){
                 res.status(200).send(doc);
@@ -42,8 +42,8 @@ export const likePost = (req,res)=>{
 }
 
 export const deletePost = (req,res)=>{
-    const {id} = req.params.id;
-    if (mongoose.Types.ObjectId.isValid(id)) return res.status(400).send({error:'invalid id'});
+    const {id} = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(402).send({error:'invalid id'});
     PostMessage.findByIdAndDelete(req.params.id,(err,doc)=>{
         if(!err){
             res.status(200).send(doc);
