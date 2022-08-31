@@ -7,7 +7,7 @@ export const signIn = (authData, navigate) => async (dispatch) => {
         dispatch({ type: 'CURRENT_USER', payload: data });
     }
     catch (e) {
-        console.log(e.response.data.message);
+        console.log(e.response.data.error);
     }
 }
 
@@ -18,6 +18,6 @@ export const signUp = (authData, navigate) => async (dispatch) => {
         dispatch({ type: 'CURRENT_USER', payload: data });
     }
     catch (e) {
-        console.log(e.response.data.message);
+        console.log(e.response.data.error);
     }
 }
