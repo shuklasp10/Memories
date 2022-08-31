@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import cors from  "cors";
 import postRouter from './routes/posts.js';
 import dotenv from 'dotenv';
+import authRouter from './routes/auth.js';
 
 //creating server
 const app = express();
@@ -18,8 +19,8 @@ app.use(bodyparser.urlencoded({limit:"30mb", extended:true}));
 app.use(cors());
 //routing all requests to router
 app.use("/posts",postRouter);
+app.use('/user',authRouter);
 
-const CONNECTION_URL = "mongodb+srv://shuklasp:shuklasp123@cluster0.trnytln.mongodb.net";
 
 const PORT = process.env.PORT || 5000;
 

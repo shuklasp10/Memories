@@ -2,15 +2,33 @@ import React, { useState } from 'react'
 import { Grid,Paper, Avatar, TextField, Button, Typography } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import useStyles from './styles';
+import {GoogleLogin} from '@react-oauth/google';
+import jwt_decode from 'jwt-decode';
+import { useDispatch } from 'react-redux';
+import {signUp} from '../../actions/auth';
+import {useNavigate} from 'react-router-dom';
 
 
 const SignUp=({setSignUp})=>{
+    const navigate = useNavigate();
     const classes = useStyles();
-    const [data, setData] = useState({fname:'',lname:'',email:'',password:''});
+    const dispatch = useDispatch();
+    const [authData,setAuthData]= useState({email:'',email_verified: false, password:'',family_name:'',given_name:'',accountType:'email'})    
     
-    const handleSubmit =(e) =>{
-        console.log(data);
+    const handleSubmit =() =>{
+        dispatch(signUp(authData,navigate));
     }
+    const handleOnChange = (e)=>{
+        setAuthData({...authData,[e.target.name]:e.target.value});
+    }
+    const onSuccess = (res) =>{
+        dispatch(signUp({...jwt_decode(res.credential),password:'',accountType:'google'},navigate));
+    }
+    const onFailure= (error) =>{
+        console.log('error');
+        console.log(error);
+    }
+
 
     return(
         <Grid>
@@ -19,10 +37,18 @@ const SignUp=({setSignUp})=>{
                      <Avatar className={classes.avatar} ><LockOutlinedIcon/></Avatar>
                     <h2>Sign Up</h2>
                 </Grid>
-                <TextField label='First Name' value={data.fname} onChange={(e)=>setData({...data,fname:e.target.value})} style={{width:'45%'}} required/> &nbsp;
-                <TextField label='Last Name' value={data.lname} onChange={(e)=>setData({...data,lname:e.target.value})} style={{width:'45%'}} required/>
-                <TextField label='E-mail' value={data.email} onChange={(e)=>setData({...data,email:e.target.value})} type="email" style={{width:'100%'}} required/>
-                <TextField label='Password' value={data.password} onChange={(e)=>setData({...data,password:e.target.value})} placeholder='Enter password' type='password' style={{width:'100%'}} required/>
+                <div style={{marginLeft:'50px'}}>
+                <GoogleLogin
+                    onSuccess={onSuccess}
+                    onError={onFailure}
+                    size='medium'
+                    text='signup_with'
+                />
+                </div>
+                <TextField label='First Name' name='given_name' value={authData.given_name} onChange={handleOnChange} style={{width:'45%'}} required/> &nbsp;
+                <TextField label='Last Name' name='family_name' value={authData.family_name} onChange={handleOnChange} style={{width:'45%'}} required/>
+                <TextField label='E-mail' name='email' value={authData.email} onChange={handleOnChange} type="email" style={{width:'100%'}} required/>
+                <TextField label='Password' name='password' value={authData.password} onChange={handleOnChange} placeholder='Enter password' type='password' style={{width:'100%'}} required/>
                 
                 <Button className={classes.primaryButton} type='submit' color='primary' variant="contained" onClick={handleSubmit}>Sign Up</Button>
                

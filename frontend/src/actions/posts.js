@@ -19,8 +19,9 @@ export const postPost = (post) => async (dispatch) =>{
   dispatch(action);
 }
 
-export const likePost = (id) => async(dispatch) => {
-  const {data} = await api.likePost(id);
+export const likePost = (id,uid) => async(dispatch) => {
+
+  const {data} = await api.likePost(id,uid);
   const action = {
     type:"UPDATE",
     payload:data
@@ -38,9 +39,7 @@ export const deletePost = (id) => async(dispatch) =>{
 }
 
 export const updatePost = (id,post) => async(dispatch) =>{
-  console.log(post);
   const {data} = await api.updatePost(id,post);
-  console.log(data);
   const action = {
     type:"UPDATE",
     payload:data
