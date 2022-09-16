@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const URL = 'http://localhost:5000/user';
+const URL = 'https://mymemoriesapp-server.vercel.app/user';
 
 export const signIn =  (authData) =>(   
     axios.post(URL+'/signin',authData)
