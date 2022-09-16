@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useStyles from './NavbarStyles';
 import memories from '../../images/memories.png';
 import { AppBar, Avatar, Button, Toolbar, Typography } from '@material-ui/core';
@@ -10,6 +10,7 @@ const Navbar = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth);
+    const [searchTag,setSearchTag] = useState();
 
     const logout = () => {
         dispatch({ type: 'LOGOUT' });
@@ -24,6 +25,10 @@ const Navbar = () => {
             </div>
             { /* left side of nav */}
             <Toolbar className={classes.toolbar}>
+                <div>
+                    <input placeholder='input tags' component='Link' to={`/posts/${searchTag}`} value = {searchTag} onChange={(e)=>setSearchTag(e.target.value)}/>
+                    <Button component={Link} to={`/posts/${searchTag}`} variant='contained' color='primary'>Search</Button>
+                </div>
                 {user ? <div className={classes.profile}>
                             <Avatar className={classes.purple} alt={user.given_name} src={user.picture} />
                             <Typography className={classes.userName} variant='h6'>{user.given_name}</Typography>
